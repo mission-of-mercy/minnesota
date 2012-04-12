@@ -11,12 +11,12 @@ class Reports::PostClinic
     @patient_count = Patient.count
 
     load_towns
-    load_counties
+    #load_counties
     load_ethnicities
     load_ages
     load_travel_times
     load_genders
-    load_previous_moms
+    #load_previous_moms
     load_insurance
     load_tobacco_use
     load_ratings

@@ -72,29 +72,6 @@
       %td{:colspan => 4}= "Total towns represented: #{@report.town_count}"
 
 %h2
-  %u Counties
-
-%table
-  %thead
-    %tr
-      %th County
-      %th State
-      %th Total Patients
-      %th Percent
-      %th
-  %tbody
-    - @report.counties.each do |county|
-      %tr
-        %td= county["county"]
-        %td= county["state"]
-        %td= county["patient_count"]
-        %td= county["percent"]
-        %td= link_to "Export",
-          admin_export_patients_path(:patients => patients_by_county(county),
-            :filename => county_filename(county)),
-          :target => "_blank"
-
-%h2
   %u Ethnicities
 
 %table
@@ -126,29 +103,6 @@
   %tfoot
     %tr
       %td{:colspan => 2}= "Average travel time: #{@report.avg_travel_time}"
-
-%h2
-  %u Previous Mom Clinics
-
-%table
-  %thead
-    %tr
-      %th Clinic Location
-      %th Clinic Year
-      %th Total Patients
-      %th Percentage
-  %tbody
-    - @report.previous_moms.each do |mom|
-      %tr
-        %td= mom["location"]
-        %td= mom["clinic_year"]
-        %td= mom["patient_count"]
-        %td= mom["percent"]
-  %tfoot
-    %tr
-      %td{:colspan => 2} Total unique patients:
-      %td= @report.distinct_previous_moms
-      %td= percent_of_clinic @report.distinct_previous_moms, @report.patient_count
 
 %h2
   %u Insurance
