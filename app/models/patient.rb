@@ -1,5 +1,15 @@
 class Patient < ActiveRecord::Base
 
+  RACES = [
+    "African American/Black",
+    "American Indian/Alaska Native",
+    "Asian/Pacific Islander",
+    "Caucasian/White",
+    "Hispanic",
+    "Indian",
+    "Other"
+  ]
+
   REGEXP = {
     :time_in_pain   => /\A(\d*\.?\d*)\s*(.+)\Z/,
     :number_only    => /\A(\d*\.?\d*)\Z/,
@@ -219,7 +229,12 @@ class Patient < ActiveRecord::Base
   def date_of_birth=(date_of_birth)
     if date_of_birth.is_a?(String)
       @date_string = date_of_birth
-      self[:date_of_birth] = Date.strptime(date_of_birth.tr("-.", "/"), "%m/%d/%Y") rescue nil
+
+      month, day, year = @date_string.split(/[-.\/]/).map(&:to_i)
+
+      year = nil if year.to_s.length != 4
+
+      self[:date_of_birth] = Date.civil(year, month, day) rescue nil
     elsif @date_string.blank?
       super
     end
@@ -240,6 +255,8 @@ class Patient < ActiveRecord::Base
   private
 
   def update_survey
+    self.survey = nil if !self.previous_chart_number.blank?
+
     if self.survey
       self.survey.city                = city
       self.survey.state               = state
@@ -257,6 +274,7 @@ class Patient < ActiveRecord::Base
 
     self.first_name.capitalize!
     self.last_name.capitalize!
+    self.state.upcase!
   end
 
   def check_in_flow
@@ -291,8 +309,14 @@ class Patient < ActiveRecord::Base
         errors.add(:date_of_birth, "can't be blank")
       else
         errors.add(:date_of_birth, "must be in a valid format (mm/dd/yyyy, mm-dd-yyyy)")
+        self[:date_of_birth] = @date_string
       end
       return false
+    else
+      if age < 0 || age > 122 # Oldest person alive
+        errors.add(:date_of_birth, "is invalid. Patient can't be #{age} years old")
+        return false
+      end
     end
 
     return true
