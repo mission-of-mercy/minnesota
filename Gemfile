@@ -22,6 +22,9 @@ gem 'highline',     :require => false
 gem 'faker',        :require => false
 gem 'rubyzip',      :require => false
 
+gem 'capistrano'
+gem 'whenever'
+
 group :test do
   gem 'minitest',  '~> 2.3.1'
   gem 'faker'
