@@ -3,7 +3,7 @@ require 'whenever/capistrano'
 
 set :application, "mom"
 
-set :repository, "git://github.com/mission-of-mercy/rhode-island.git"
+set :repository, "git://github.com/mission-of-mercy/minnesota.git"
 set :deploy_via, :remote_cache
 
 set :scm, :git
