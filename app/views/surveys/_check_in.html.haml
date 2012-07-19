@@ -4,7 +4,7 @@
     %br
     .input
       = s.select :heard_about_clinic,
-        ['Friend or Family','Media: Newspaper/TV/Radio','Flyer or Poster','Other'],
+        ['Friend or Family','Social Service (IE Head Start or United Way)','Advertising (IE Flyer or Poster)','Church, School, Mosque, or Temple', 'Other'],
         {:include_blank => true}
     #heard_about_other_div
       %p
@@ -19,7 +19,7 @@
       = s.radio_button :has_place_to_be_seen_for_dental_care, false
       = s.label :has_place_to_be_seen_for_dental_care, "No", :value => false
   %p
-    What, if any, insurance do you have to pay for dental care? (Check all that apply)<br/>
+    Your dental care today is no charge to you.  For our information only, do you have dental insurance from any source?<br/>
     .input
       = s.check_box :no_insurance
       = s.label :no_insurance
@@ -27,9 +27,15 @@
       = s.check_box :insurance_from_job
       = s.label :insurance_from_job
       %br
-      = s.check_box :medicaid_or_chp_plus
-      = s.label :medicaid_or_chp_plus, "Medicaid or CHP+"
+      = s.check_box :medical_assistance
+      = s.label :medical_assistance
       %br
       = s.check_box :self_purchase_insurance
       = s.label :self_purchase_insurance, "Insurance purchased by myself"
       %br
+    %p
+      = s.label :time_arrived, "Approximately what time did you get in line?"
+      %br
+      .input
+      = s.datetime_select :time_arrived, :time_separator => ':',
+        :include_seconds => false, :ampm => true

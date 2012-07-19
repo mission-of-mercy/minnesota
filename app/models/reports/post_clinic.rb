@@ -5,7 +5,8 @@ class Reports::PostClinic
               :distinct_previous_moms, :heard_about_clinic, :patient_count,
               :told_needed_more_dental_treatment, :tobacco_use_ages,
               :has_place_to_be_seen_for_dental_care, :last_dental_visit,
-              :average_rating
+              :average_rating, :reason_for_no_dental_care, :family_size,
+              :average_family_size
 
   def initialize
     @patient_count = Patient.count
@@ -27,6 +28,8 @@ class Reports::PostClinic
     load_has_place_to_be_seen_for_dental_care
     load_tobacco_use_ages
     load_last_dental_visit
+    load_reason_for_no_dental_care
+    load_family_size
   end
 
   def load_treatment_areas
@@ -220,12 +223,38 @@ class Reports::PostClinic
   def load_insurance
     @insurances = []
 
-    ["no_insurance", "insurance_from_job", "medicaid_or_chp_plus",
+    ["no_insurance", "insurance_from_job", "medical_assistance",
      "self_purchase_insurance", "other_insurance"].each do |i|
       add_insurance i
     end
 
     calculate_percentage @insurances
+  end
+
+  def load_reason_for_no_dental_care
+    sql = %{SELECT trim(initcap(surveys.reason_for_no_dental_care)) as reason, count(*) as patient_count
+            FROM surveys
+            GROUP BY trim(initcap(surveys.reason_for_no_dental_care))
+            ORDER BY trim(initcap(surveys.reason_for_no_dental_care))}
+
+    @reason_for_no_dental_care = Patient.connection.select_all(sql)
+
+
+    calculate_percentage @reason_for_no_dental_care
+  end
+
+  def load_family_size
+    sql = %{SELECT number_of_family_members_at_clinic, count(*) as patient_count
+            FROM surveys
+            GROUP BY number_of_family_members_at_clinic
+            ORDER BY number_of_family_members_at_clinic}
+
+    @family_size = Patient.connection.select_all(sql)
+
+    @average_family_size = Survey.where("number_of_family_members_at_clinic is not null").
+      average(:number_of_family_members_at_clinic)
+
+    calculate_percentage @family_size
   end
 
   def load_tobacco_use

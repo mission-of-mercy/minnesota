@@ -88,6 +88,22 @@
         %td= ethnic["percent"]
 
 %h2
+  %u Reasons patients don't get dental care
+
+%table
+  %thead
+    %tr
+      %th Reason
+      %th Total Patients
+      %th Percent
+  %tbody
+    - @report.reason_for_no_dental_care.each do |ethnic|
+      %tr
+        %td= ethnic["reason"]
+        %td= ethnic["patient_count"]
+        %td= ethnic["percent"]
+
+%h2
   %u Travel Times
 
 %table
@@ -231,6 +247,31 @@
       %td
         = sprintf('%.2f', @report.average_rating || 0)
 %p
+
+%h2
+  %u Family Members at Clinic
+
+%table
+  %thead
+    %tr
+      %th Family Size
+      %th Total Patients
+      %th Percentage
+  %tbody
+    - @report.family_size.each do |rate|
+      %tr
+        %td= rate["number_of_family_members_at_clinic"]
+        %td= rate["patient_count"]
+        %td= rate["percent"]
+  %tfoot
+    %tr
+      %td{:colspan => 2} Average family size
+      %td
+        = sprintf('%.2f', @report.average_family_size || 0)
+%p
+
+%h2
+  %u Patients in pain
 
 %table
   %thead
