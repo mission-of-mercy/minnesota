@@ -12,7 +12,7 @@ set :user, "deploy"
 set :deploy_to, "/home/deploy/#{application}"
 set :use_sudo, false
 
-server "missionofmercy.local", :app, :web, :db, :primary => true
+server "mnmom.dentaltechgroup.com", :app, :web, :db, :primary => true
 
 task :local do
   # TODO Change this path to a local install
